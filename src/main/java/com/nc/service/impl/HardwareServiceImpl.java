@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.sql.rowset.serial.SerialBlob;
-import java.sql.Blob;
 import java.util.List;
 
 @Slf4j
@@ -58,9 +56,9 @@ public class HardwareServiceImpl implements HardwareService {
 
     @Override
     public void addNewHardware(HardwareForm hardwareForm) {
-        Blob blob = null;
+        byte[] image = null;
         try {
-            blob = new SerialBlob(hardwareForm.getImage().getBytes());
+            image = hardwareForm.getImage().getBytes();
         } catch (Exception e) {
             log.error("An error occurred in " + hardwareForm.getName() + " when converting images from byte to blob :\n" + e);
         }
@@ -71,7 +69,7 @@ public class HardwareServiceImpl implements HardwareService {
         hardware.setCharacteristics(hardwareForm.getCharacteristics());
         hardware.setPrice(Double.parseDouble(hardwareForm.getPrice()));
         hardware.setTotalCount(hardwareForm.getTotalCount());
-        hardware.setImage(blob);
+        hardware.setImage(image);
         save(hardware);
     }
 
@@ -81,11 +79,11 @@ public class HardwareServiceImpl implements HardwareService {
         Hardware newHardware = new Hardware();
         newHardware.setId(hardwareForm.getId());
         try {
-            if (hardwareForm.getImage().getSize() != 0)
-                newHardware.setImage(new SerialBlob(hardwareForm.getImage().getBytes()));
-            else
-                newHardware.setImage(new SerialBlob(oldHardware.getImage()));
-
+            if (hardwareForm.getImage().getSize() != 0) {
+                newHardware.setImage(hardwareForm.getImage().getBytes());
+            } else {
+                newHardware.setImage(oldHardware.getImage());
+            }
         } catch (Exception e) {
             log.error("An error occurred in " + hardwareForm.getName() + " when converting images from byte to blob :\n" + e);
         }

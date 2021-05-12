@@ -30,22 +30,22 @@
             <input th:value="${hardware.id}" name="id" type="hidden">
             <div class="input-group form-group">
                 <input type="text"
-                       th:class="${#fields.hasErrors('nameHardware')}?'form-control is-invalid':'form-control'"
-                       th:value="${hardware.name}" name="nameHardware"
-                       id="nameHardware" min="1" max="40"
+                       th:class="${#fields.hasErrors('name')}?'form-control is-invalid':'form-control'"
+                       th:value="${hardware.name}" name="name"
+                       id="name" min="1" max="40"
                        placeholder="Нaзвание"
                        required="required"/>
-                <div th:if="${#fields.hasErrors('nameHardware')}" th:errors="*{getName}"
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
                      class="invalid-feedback"></div>
             </div>
             <div class="input-group form-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Описание</span>
                 </div>
-                <textarea th:value="${hardware.description}" name="descriptionHardware" id="descriptionHardware"
-                          th:class="${#fields.hasErrors('descriptionHardware')}?'form-control is-invalid':'form-control'"
+                <textarea th:value="${hardware.description}" name="description" id="description"
+                          th:class="${#fields.hasErrors('description')}?'form-control is-invalid':'form-control'"
                           aria-label="With textarea"></textarea>
-                <div th:if="${#fields.hasErrors('descriptionHardware')}" th:errors="*{getDescription}"
+                <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}"
                      class="invalid-feedback"></div>
             </div>
             <div class="form-group">
@@ -79,18 +79,18 @@
                        min="1"
                        placeholder="Цена"
                        required="required"/>
-                <div th:if="${#fields.hasErrors('price')}" th:errors="*{getPrice}"
+                <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}"
                      class="invalid-feedback"></div>
             </div>
             <div class="form-group">
                 <label>Количество:</label>
                 <input type="number"
-                       th:class="${#fields.hasErrors('countHardware')}?'form-control is-invalid':'form-control'"
-                       th:value="${hardware.totalCount}" name="countHardware"
+                       th:class="${#fields.hasErrors('totalCount')}?'form-control is-invalid':'form-control'"
+                       th:value="${hardware.totalCount}" name="totalCount"
                        min="0"
                        placeholder="Количество"
                        required="required"/>
-                <div th:if="${#fields.hasErrors('countHardware')}" th:errors="*{getTotalCount}"
+                <div th:if="${#fields.hasErrors('totalCount')}" th:errors="*{totalCount}"
                      class="invalid-feedback"></div>
 
             </div>
