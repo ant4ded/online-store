@@ -44,7 +44,7 @@ function fire_ajax_submit() {
                     "   <div class=\"one-product\">" +
                     "       <div class=\"thumbnail\">" +
                     "           <a href=\"/catalog/good?hardwareId=" + hardware["id"] + "\">" +
-                    "               <img src=\"data:image/png;base64," + hardware["image"] + " class=\"pd-10 w-100\" height=\"200\">" +
+                    "               <img src=\"data:image/png;base64," + hardware["image"] + "\" class=\"pd-10 w-100\" height=\"200\">" +
                     "           </a>" +
                     "           <div class=\"caption\">" +
                     "               <div class=\"row\">" +
