@@ -1,4 +1,4 @@
-package com.nc.service.Impl;
+package com.nc.service.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

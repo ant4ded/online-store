@@ -1,7 +1,7 @@
 package com.nc.controller;
 
 import com.nc.model.*;
-import com.nc.service.Impl.*;
+import com.nc.service.impl.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -1,4 +1,4 @@
-package com.nc.service.Impl;
+package com.nc.service.impl;
 
 import com.nc.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;

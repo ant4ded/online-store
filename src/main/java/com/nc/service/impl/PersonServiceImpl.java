@@ -1,4 +1,4 @@
-package com.nc.service.Impl;
+package com.nc.service.impl;
 
 import com.nc.config.SpringSecurityConfig;
 import com.nc.enums.Role;

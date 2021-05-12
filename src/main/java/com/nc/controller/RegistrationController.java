@@ -2,8 +2,8 @@ package com.nc.controller;
 
 import com.nc.model.Category;
 import com.nc.model.Person;
-import com.nc.service.Impl.CategoryServiceImpl;
-import com.nc.service.Impl.PersonServiceImpl;
+import com.nc.service.impl.CategoryServiceImpl;
+import com.nc.service.impl.PersonServiceImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

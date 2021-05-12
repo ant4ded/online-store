@@ -4,7 +4,7 @@ import com.nc.model.AjaxResponseBody;
 import com.nc.model.Category;
 import com.nc.model.Characteristic;
 import com.nc.model.Hardware;
-import com.nc.service.Impl.*;
+import com.nc.service.impl.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;

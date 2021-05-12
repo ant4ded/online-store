@@ -1,4 +1,4 @@
-package com.nc.service.Impl;
+package com.nc.service.impl;
 
 import com.nc.model.Characteristic;
 import com.nc.model.Hardware;

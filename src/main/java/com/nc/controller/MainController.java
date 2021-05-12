@@ -2,10 +2,10 @@ package com.nc.controller;
 
 import com.nc.model.Category;
 import com.nc.model.Hardware;
-import com.nc.service.Impl.CategoryServiceImpl;
-import com.nc.service.Impl.CurrencySingleton;
-import com.nc.service.Impl.HardwareServiceImpl;
-import com.nc.service.Impl.OrderServiceImpl;
+import com.nc.service.impl.CategoryServiceImpl;
+import com.nc.service.impl.CurrencySingleton;
+import com.nc.service.impl.HardwareServiceImpl;
+import com.nc.service.impl.OrderServiceImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;

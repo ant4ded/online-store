@@ -1,7 +1,7 @@
 package com.nc.config;
 
 
-import com.nc.service.Impl.UserService;
+import com.nc.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

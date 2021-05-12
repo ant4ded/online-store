@@ -1,4 +1,4 @@
-package com.nc.service.Impl;
+package com.nc.service.impl;
 
 import com.nc.enums.Status;
 import com.nc.model.Hardware;
