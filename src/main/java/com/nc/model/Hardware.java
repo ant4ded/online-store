@@ -1,6 +1,5 @@
 package com.nc.model;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
 import javax.persistence.*;
@@ -114,7 +113,7 @@ public class Hardware {
                 imageHardware.free();
             }
         } catch (SQLException e) {
-            LOGGER.error("Error converting image from blob to byte:\n" + ExceptionUtils.getStackTrace(e));
+            LOGGER.error("Error converting image from blob to byte:\n" + e);
             e.printStackTrace();
         }
 

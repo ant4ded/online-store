@@ -5,7 +5,6 @@ import com.nc.model.Hardware;
 import com.nc.model.HardwareForm;
 import com.nc.repository.HardwareRepository;
 import com.nc.service.HardwareService;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,7 @@ import java.util.List;
 
 @Service
 public class HardwareServiceImpl implements HardwareService {
-    private final static Logger LOGGER = Logger.getLogger(HardwareServiceImpl.class);
+    private static final Logger LOGGER = Logger.getLogger(HardwareServiceImpl.class);
     @Autowired
     HardwareRepository dao;
 
@@ -63,7 +62,7 @@ public class HardwareServiceImpl implements HardwareService {
         try {
             blob = new SerialBlob(hardwareForm.getImageHardware().getBytes());
         } catch (Exception e) {
-            LOGGER.error("An error occurred in " + hardwareForm.getNameHardware() + " when converting images from byte to blob :\n" + ExceptionUtils.getStackTrace(e));
+            LOGGER.error("An error occurred in " + hardwareForm.getNameHardware() + " when converting images from byte to blob :\n" + e);
         }
         Hardware hardware = new Hardware();
         hardware.setName(hardwareForm.getNameHardware());
@@ -88,7 +87,7 @@ public class HardwareServiceImpl implements HardwareService {
                 newHardware.setImageHardware(new SerialBlob(oldHardware.getImageHardware()));
 
         } catch (Exception e) {
-            LOGGER.error("An error occurred in " + hardwareForm.getNameHardware() + " when converting images from byte to blob :\n" + ExceptionUtils.getStackTrace(e));
+            LOGGER.error("An error occurred in " + hardwareForm.getNameHardware() + " when converting images from byte to blob :\n" + e);
         }
         newHardware.setName(hardwareForm.getNameHardware());
         newHardware.setDescriptionHardware(hardwareForm.getDescriptionHardware());

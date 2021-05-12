@@ -12,7 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -22,11 +21,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
-
 @Service
 public class PersonServiceImpl implements PersonService {
-    private final static Logger LOGGER = Logger.getLogger(PersonServiceImpl.class);
+    private static final Logger LOGGER = Logger.getLogger(PersonServiceImpl.class);
     @Autowired
     PersonRepository dao;
     @Autowired
@@ -65,11 +62,7 @@ public class PersonServiceImpl implements PersonService {
             person.setPasswordPerson(oldPerson.getPassword());
         else {
             PasswordEncoder passwordEncoder = springSecurityConfig.getPasswordEncoder();
-            String correctLine = escapeHtml4(newPassword);
-            if (correctLine.equals(newPassword))
-                person.setPasswordPerson(passwordEncoder.encode(newPassword));
-            else
-                return false;
+            person.setPasswordPerson(passwordEncoder.encode(newPassword));
         }
         person.setActive(oldPerson.isActive());
         person.setRole(oldPerson.getRole());
