@@ -30,7 +30,6 @@ public class AdminController {
 
     // TODO: 12.05.2021 make rest
     // TODO: 12.05.2021 db names
-    // TODO: 12.05.2021 add lombok
 
     @RequestMapping("/admin")
     public String admin(Model model) {
