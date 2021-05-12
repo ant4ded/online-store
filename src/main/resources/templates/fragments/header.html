@@ -19,7 +19,7 @@
             <li class="nav-item"><a th:href='@{/catalog(categoryId=0)}'>Каталог<span
                     class="fa fa-caret-down"></span></a>
                 <ul>
-                    <li th:each="category:${categories}"><a th:href="@{/catalog(categoryId=${category.id})}">[[${category.nameCategory}]]</a>
+                    <li th:each="category:${categories}"><a th:href="@{/catalog(categoryId=${category.id})}">[[${category.name}]]</a>
                     </li>
                 </ul>
 

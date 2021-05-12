@@ -25,23 +25,23 @@
             <input th:value="${characteristic.id}" name="id" type="hidden">
             <div class="input-group form-group">
                 <input type="text"
-                       th:class="${#fields.hasErrors('nameCharacteristic')}?'form-control is-invalid':'form-control'"
-                       th:value="${characteristic.nameCharacteristic}" name="nameCharacteristic"
+                       th:class="${#fields.hasErrors('name')}?'form-control is-invalid':'form-control'"
+                       th:value="${characteristic.name}" name="name"
                        id="nameCharact" min="1" max="40"
                        placeholder="Нaзвание"
                        required="required"/>
-                <div th:if="${#fields.hasErrors('nameCharacteristic')}" th:errors="*{nameCharacteristic}"
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
                      class="invalid-feedback"></div>
             </div>
             <div class="input-group form-group">
                 <input type="text"
-                       th:class="${#fields.hasErrors('valueCharacteristic')}?'form-control is-invalid':'form-control'"
-                       th:if="characteristic!=null" th:value="${characteristic.valueCharacteristic}"
-                       name="valueCharacteristic"
+                       th:class="${#fields.hasErrors('value')}?'form-control is-invalid':'form-control'"
+                       th:if="characteristic!=null" th:value="${characteristic.value}"
+                       name="value"
                        id="nameValue" min="1" max="40"
                        placeholder="Значение"
                        required="required"/>
-                <div th:if="${#fields.hasErrors('valueCharacteristic')}" th:errors="*{valueCharacteristic}"
+                <div th:if="${#fields.hasErrors('value')}" th:errors="*{value}"
                      class="invalid-feedback"></div>
             </div>
             <div class="form-group">
@@ -49,7 +49,7 @@
                 <select class="form-control" th:if="characteristic!=null" name="category" th:field="*{category.id}">
                     <option value="-1">Выберите...</option>
                     <option th:each="category : ${categories}" th:value="${category.id}"
-                            th:text="${category.nameCategory}"></option>
+                            th:text="${category.name}"></option>
                 </select>
             </div>
             <div class="form-group">
@@ -61,12 +61,12 @@
             <input th:value="${category.id}" name="id" type="hidden">
             <div class="input-group form-group">
                 <input type="text"
-                       th:class="${#fields.hasErrors('nameCategory')}?'form-control is-invalid':'form-control'"
-                       th:value="${category.nameCategory}" name="nameCategory"
-                       id="nameCategory" min="1" max="40"
+                       th:class="${#fields.hasErrors('name')}?'form-control is-invalid':'form-control'"
+                       th:value="${category.name}" name="name"
+                       id="name" min="1" max="40"
                        placeholder="Нaзвание"
                        required="required"/>
-                <div th:if="${#fields.hasErrors('nameCategory')}" th:errors="*{nameCategory}"
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
                      class="invalid-feedback"></div>
             </div>
             <div class="form-group">

@@ -65,11 +65,11 @@
                 </tr>
                 </thead>
                 <tr th:each="person:${people}">
-                    <td th:utext="${person.namePerson} "></td>
-                    <td th:utext="${person.surnamePerson}"></td>
+                    <td th:utext="${person.name} "></td>
+                    <td th:utext="${person.surname}"></td>
 
-                    <td th:utext="${person.mailPerson}"></td>
-                    <td th:utext="${person.loginPerson}"></td>
+                    <td th:utext="${person.mail}"></td>
+                    <td th:utext="${person.login}"></td>
                     <td th:utext="${person.role.toString()}"></td>
                     <td th:if="${person.active}">Активирован</td>
                     <td th:if="${!person.active}">Не активирован</td>
@@ -114,18 +114,18 @@
                 <tr th:each="hardware:${hardwares}" style="text-align: center">
                     <td><img th:src="@{'data:image/jpg;base64,'+${hardware.generateBase64Image()}}" width="100"
                              height="100" alt="Нет изображения"></td>
-                    <td th:utext="${hardware.nameHardware} "></td>
+                    <td th:utext="${hardware.name} "></td>
                     <td style="text-align: initial;"
-                        th:utext="${hardware.category!=null}?${hardware.category.nameCategory}:'Категория отсутствует'"></td>
+                        th:utext="${hardware.category!=null}?${hardware.category.name}:'Категория отсутствует'"></td>
 
-                    <td th:utext="${hardware.descriptionHardware}"></td>
+                    <td th:utext="${hardware.description}"></td>
                     <td style="text-align: initial;">
                         <div th:each="characteristic:${hardware.characteristics}">
-                            [[${characteristic.nameCharacteristic}]]: [[${characteristic.valueCharacteristic}]]
+                            [[${characteristic.name}]]: [[${characteristic.value}]]
                         </div>
                     </td>
-                    <td th:utext="${hardware.priceHardware}"></td>
-                    <td th:utext="${hardware.countHardware}"></td>
+                    <td th:utext="${hardware.price}"></td>
+                    <td th:utext="${hardware.totalCount}"></td>
                     <td style="text-align: center; word-spacing: 10px;">
                         <a class="btn btn-info" style="padding: 5px 10px;"
                            th:href="@{/edit-hardware(hardwareId=${hardware.id})}"><i
@@ -156,7 +156,7 @@
                                   style="padding: 10px;"
                                   enctype="multipart/form-data">
                                 <div class="input-group form-group">
-                                    <input type="text" class="form-control" th:field="*{nameHardware}" name="name"
+                                    <input type="text" class="form-control" th:field="*{name}" name="name"
                                            id="name" min="1" max="40"
                                            placeholder="Нaзвание"
                                            required="required"/>
@@ -165,12 +165,12 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Описание</span>
                                     </div>
-                                    <textarea th:field="*{descriptionHardware}" class="form-control"
+                                    <textarea th:field="*{description}" class="form-control"
                                               aria-label="With textarea"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleFormControlFile1">Выберите файл</label>
-                                    <input type="file" th:field="*{imageHardware}" class="form-control-file"
+                                    <input type="file" th:field="*{image}" class="form-control-file"
                                            id="exampleFormControlFile1">
                                     <div id="invalid_message" class="invalid-feedback">
                                         Превышен размер изображения.(5MB)
@@ -180,7 +180,7 @@
                                     <label>Выберите Категорию:</label>
                                     <select class="form-control" name="category" th:field="*{category.id}">
                                         <option th:each="category : ${categories}" th:value="${category.id}"
-                                                th:text="${category.nameCategory}"></option>
+                                                th:text="${category.name}"></option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -189,14 +189,14 @@
                                     <select id="select_id" class="selectpicker form-control" multiple
                                             data-live-search="true" name="characteristics">
                                         <option th:each="item:${characts}" th:value="${item.id}">
-                                            [[${item.nameCharacteristic}]]: [[${item.valueCharacteristic}]]
+                                            [[${item.name}]]: [[${item.value}]]
                                         </option>
                                     </select>
 
                                 </div>
                                 <div class="form-group">
                                     <label for="price_hardware">Цена:</label>
-                                    <input type="number" step="0.01" class="form-control" th:field="*{priceHardware}"
+                                    <input type="number" step="0.01" class="form-control" th:field="*{price}"
                                            name="price"
                                            min="1" id="price_hardware"
                                            placeholder="Цена"
@@ -204,7 +204,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="count_hardware">Количество:</label>
-                                    <input type="number" class="form-control" th:field="*{countHardware}"
+                                    <input type="number" class="form-control" th:field="*{totalCount}"
                                            name="count"
                                            min="0" id="count_hardware"
                                            placeholder="Количество"
@@ -242,10 +242,10 @@
                 </tr>
                 </thead>
                 <tr th:each="charact:${characts}">
-                    <td th:utext="${charact.nameCharacteristic} "></td>
-                    <td th:utext="${charact.valueCharacteristic}"></td>
+                    <td th:utext="${charact.name} "></td>
+                    <td th:utext="${charact.value}"></td>
 
-                    <td th:utext="${charact.category!=null}? ${charact.category.nameCategory}:'Категория отсутсвует'"></td>
+                    <td th:utext="${charact.category!=null}? ${charact.category.name}:'Категория отсутсвует'"></td>
 
                     <td style="text-align: center; word-spacing: 10px;">
                         <a class="btn btn-info" style="padding: 5px 10px;"
@@ -279,13 +279,13 @@
                                 <div class="input-group form-group">
                                     <input type="text"
                                            class="form-control"
-                                           th:field="*{nameCharacteristic}" name="name"
+                                           th:field="*{name}" name="name"
                                            id="nameCharact" min="1" max="40"
                                            placeholder="Нaзвание"
                                            required="required"/>
                                 </div>
                                 <div class="input-group form-group">
-                                    <input type="text" class="form-control" th:field="*{valueCharacteristic}"
+                                    <input type="text" class="form-control" th:field="*{value}"
                                            name="name"
                                            id="nameValue" min="1" max="40"
                                            placeholder="Значение"
@@ -295,7 +295,7 @@
                                     <label>Выберите Категорию:</label>
                                     <select class="form-control" name="category" th:field="*{category.id}">
                                         <option th:each="category : ${categories}" th:value="${category.id}"
-                                                th:text="${category.nameCategory}"></option>
+                                                th:text="${category.name}"></option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -328,7 +328,7 @@
                 </tr>
                 </thead>
                 <tr th:each="category:${categories}">
-                    <td th:utext="${category.nameCategory} "></td>
+                    <td th:utext="${category.name} "></td>
 
                     <td style="text-align: center; word-spacing: 10px;">
                         <a class="btn btn-info" style="padding: 5px 10px;"
@@ -360,8 +360,8 @@
                                   style="padding: 10px;"
                                   enctype="multipart/form-data">
                                 <div class="input-group form-group">
-                                    <input type="text" class="form-control" th:field="*{nameCategory}" name="name"
-                                           id="nameCategory" min="1" max="40"
+                                    <input type="text" class="form-control" th:field="*{name}" name="name"
+                                           id="name" min="1" max="40"
                                            placeholder="Нaзвание"
                                            required="required"/>
                                 </div>
@@ -392,11 +392,11 @@
                 </tr>
                 </thead>
                 <tr th:each="order:${orders}">
-                    <td th:utext="${order.hardware.nameHardware} "></td>
-                    <td th:utext="${order.countOrder}"></td>
-                    <td th:utext="${order.hardware.priceHardware*order.countOrder}"></td>
-                    <td>[[${order.person.namePerson}]] [[${order.person.surnamePerson}]];<br/>
-                        [[${order.person.mailPerson}]]
+                    <td th:utext="${order.hardware.name} "></td>
+                    <td th:utext="${order.count}"></td>
+                    <td th:utext="${order.hardware.price*order.count}"></td>
+                    <td>[[${order.person.name}]] [[${order.person.surname}]];<br/>
+                        [[${order.person.mail}]]
                     </td>
                     <td th:if="${order.status.toString().equals('IN_CART')}">Не оформлен</td>
                     <td th:if="${order.status.toString().equals('IN_PROCESSING')}">В ожидании ответа</td>

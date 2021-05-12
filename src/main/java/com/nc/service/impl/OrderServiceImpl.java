@@ -6,51 +6,49 @@ import com.nc.model.Order;
 import com.nc.model.Person;
 import com.nc.repository.OrderRepository;
 import com.nc.service.OrderService;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
-    private final static Logger LOGGER = Logger.getLogger(OrderServiceImpl.class);
-    @Autowired
-    OrderRepository dao;
-    @Autowired
-    HardwareServiceImpl hardwareService;
-    @Autowired
-    PersonServiceImpl personService;
+    private final OrderRepository dao;
+    private final HardwareServiceImpl hardwareService;
+    private final PersonServiceImpl personService;
 
     @Override
     public List<Order> findAll() {
-        LOGGER.info("Taking data from the database (All orders)");
+        log.info("Taking data from the database (All orders)");
         return dao.findAll();
     }
 
     @Override
     public Order findById(long id) {
-        LOGGER.info("Taking data from the database (Order by ID)");
+        log.info("Taking data from the database (Order by ID)");
         return dao.findById(id);
     }
 
     @Override
     public List<Order> findByPerson_Id(long id) {
-        LOGGER.info("Taking data from the database (Orders by user ID)");
+        log.info("Taking data from the database (Orders by user ID)");
         return dao.findByPerson_Id(id);
     }
 
     @Override
     public List<Order> findByPerson(Person person) {
-        LOGGER.info("Taking data from the database (Orders for the user)");
+        log.info("Taking data from the database (Orders for the user)");
         return dao.findByPerson(person);
     }
 
     @Override
     public void save(Order order) {
-        LOGGER.info("Writing order data to the database\n" + order.toString());
+        log.info("Writing order data to the database\n" + order.toString());
         dao.save(order);
     }
 
@@ -58,9 +56,9 @@ public class OrderServiceImpl implements OrderService {
     public void update(Order order) {
         Order oldOrder = dao.findById(order.getId());
         order.setHardware(oldOrder.getHardware());
-        order.setCountOrder(oldOrder.getCountOrder());
+        order.setCount(oldOrder.getCount());
         order.setPerson(oldOrder.getPerson());
-        LOGGER.info("Updating order data in the database\n" + order.toString());
+        log.info("Updating order data in the database\n" + order.toString());
         dao.save(order);
     }
 
@@ -69,10 +67,10 @@ public class OrderServiceImpl implements OrderService {
         Order order = dao.findById(id);
         if (order.getStatus().equals(Status.IN_PROCESSING)) {
             Hardware hardware = hardwareService.findById(order.getHardware().getId());
-            hardware.setCountHardware(hardware.getCountHardware() + order.getCountOrder());
+            hardware.setTotalCount(hardware.getTotalCount() + order.getCount());
             hardwareService.save(hardware);
         }
-        LOGGER.info("Removing order data from the database\n" + order.toString());
+        log.info("Removing order data from the database\n" + order.toString());
         dao.deleteById(id);
     }
 
@@ -81,18 +79,18 @@ public class OrderServiceImpl implements OrderService {
         Hardware hardware = hardwareService.findById(idHardware);
         Person person = personService.findAuthenticationPerson();
         Order orderExist = dao.findByHardwareAndPersonAndStatus(hardware, person, Status.IN_CART);
-        if (orderExist != null && orderExist.getCountOrder() >= hardware.getCountHardware())
+        if (orderExist != null && orderExist.getCount() >= hardware.getTotalCount())
             return false;
-        if (hardware.getCountHardware() == 0) {
+        if (hardware.getTotalCount() == 0) {
             return false;
         } else {
             if (orderExist != null) {
-                orderExist.setCountOrder(orderExist.getCountOrder() + count);
-                LOGGER.info("Updating order data in the database\n" + orderExist.toString());
+                orderExist.setCount(orderExist.getCount() + count);
+                log.info("Updating order data in the database\n" + orderExist.toString());
                 dao.save(orderExist);
             } else {
-                Order order = new Order(person, hardware, count, Status.IN_CART);
-                LOGGER.info("Writing order data to the database\n" + order.toString());
+                Order order = new Order(0, person, hardware, count, Status.IN_CART);
+                log.info("Writing order data to the database\n" + order.toString());
                 dao.save(order);
             }
             return true;
@@ -101,14 +99,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public double createTotalCost(List<Order> orders) {
-        LOGGER.info("Finding the total amount of the order.");
-        return orders.stream().mapToDouble(item -> item.getHardware().getPriceHardware() * item.getCountOrder()).sum();
+        log.info("Finding the total amount of the order.");
+        return orders.stream().mapToDouble(item -> item.getHardware().getPrice() * item.getCount()).sum();
     }
 
     @Override
     @Transactional
     public void deleteAllByPersonId(long id) {
-        LOGGER.info("Delete orders by user ID");
+        log.info("Delete orders by user ID");
         dao.deleteAllByPersonId(id);
     }
 
@@ -119,21 +117,21 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders = dao.findByPersonAndStatus(person, Status.IN_CART);
         orders.forEach(order -> order.setStatus(Status.IN_PROCESSING));
         orders.forEach(order -> {
-            if (order.getCountOrder() <= order.getHardware().getCountHardware())
+            if (order.getCount() <= order.getHardware().getTotalCount())
                 order.getHardware()
-                        .setCountHardware(order.getHardware().getCountHardware() - order.getCountOrder());
+                        .setTotalCount(order.getHardware().getTotalCount() - order.getCount());
             else
-                order.setCountOrder(0);
+                order.setCount(0);
         });
-        List<Order> deleteOrders = orders.stream().filter(order -> order.getCountOrder() == 0).collect(Collectors.toList());
+        List<Order> deleteOrders = orders.stream().filter(order -> order.getCount() == 0).collect(Collectors.toList());
         if (deleteOrders.size() != 0) {
             dao.deleteAll(deleteOrders);
             isAllValidate = false;
         }
-        orders.removeIf(order -> order.getCountOrder() == 0);
+        orders.removeIf(order -> order.getCount() == 0);
         List<Hardware> hardwares = orders.stream().map(Order::getHardware).collect(Collectors.toList());
         hardwareService.saveAll(hardwares);
-        LOGGER.info("Updating order data in the database");
+        log.info("Updating order data in the database");
         dao.saveAll(orders);
         return isAllValidate;
     }
@@ -142,13 +140,13 @@ public class OrderServiceImpl implements OrderService {
     public void changeStatusOnDelivered(long id) {
         Order order = dao.findById(id);
         order.setStatus(Status.DELIVERED);
-        LOGGER.info("Updating order data in the database");
+        log.info("Updating order data in the database");
         dao.save(order);
     }
 
     @Override
     public List<Order> findByPersonAndStatus(Person person, Status status) {
-        LOGGER.info("Taking data from the database (Orders for a specific user and status)");
+        log.info("Taking data from the database (Orders for a specific user and status)");
         return dao.findByPersonAndStatus(person, status);
     }
 }

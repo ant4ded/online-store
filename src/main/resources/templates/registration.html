@@ -29,55 +29,55 @@
 
                         <label class="text-white col-md-12" th:if="${person!=null}" style="padding: 0;"><h5>Имя:</h5>
                         </label>
-                        <input th:if="${person!=null}" th:value="${person.namePerson}" type="text"
-                               th:class="${#fields.hasErrors('namePerson')}?'form-control is-invalid':'form-control'"
-                               name="namePerson"
+                        <input th:if="${person!=null}" th:value="${person.name}" type="text"
+                               th:class="${#fields.hasErrors('name')}?'form-control is-invalid':'form-control'"
+                               name="name"
                                id="name1" min="1" max="40"
                                placeholder="имя"
                                required="required"/>
 
-                        <input th:if="${person==null}" th:field="*{namePerson}" type="text"
-                               th:class="${#fields.hasErrors('namePerson')}?'form-control is-invalid':'form-control'"
+                        <input th:if="${person==null}" th:field="*{name}" type="text"
+                               th:class="${#fields.hasErrors('name')}?'form-control is-invalid':'form-control'"
                                name="name" id="name2" min="1" max="40"
                                placeholder="имя"
                                required="required"/>
-                        <div th:if="${#fields.hasErrors('namePerson')}" th:errors="*{namePerson}"
+                        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
                              class="invalid-feedback text-white"></div>
                     </div>
                     <div class="input-group form-group">
                         <label class="text-white col-md-12" th:if="${person!=null}" style="padding: 0;"><h5>
                             Фамилия:</h5></label>
-                        <input th:if="${person!=null}" th:value="${person.surnamePerson}" type="text"
-                               th:class="${#fields.hasErrors('surnamePerson')}?'form-control is-invalid':'form-control'"
-                               name="surnamePerson" id="surname1"
+                        <input th:if="${person!=null}" th:value="${person.surname}" type="text"
+                               th:class="${#fields.hasErrors('surname')}?'form-control is-invalid':'form-control'"
+                               name="surname" id="surname1"
                                min="1" max="40"
                                placeholder="фамилия"
                                required="required"/>
-                        <input th:if="${person==null}" th:field="*{surnamePerson}" type="text"
-                               th:class="${#fields.hasErrors('surnamePerson')}?'form-control is-invalid':'form-control'"
+                        <input th:if="${person==null}" th:field="*{surname}" type="text"
+                               th:class="${#fields.hasErrors('surname')}?'form-control is-invalid':'form-control'"
                                name="surname" id="surname2"
                                min="1" max="40"
                                placeholder="фамилия"
                                required="required"/>
-                        <div th:if="${#fields.hasErrors('surnamePerson')}" th:errors="*{surnamePerson}"
+                        <div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"
                              class="invalid-feedback text-white"></div>
                     </div>
                     <div class="form-group">
                         <label class="text-white col-md-12" th:if="${person!=null}" style="padding: 0;"><h5>Почта:</h5>
                         </label>
-                        <input th:if="${person!=null}" th:value="${person.mailPerson}" type="email"
-                               th:class="${#fields.hasErrors('mailPerson')}?'form-control is-invalid':'form-control'"
-                               name="mailPerson" id="mail1"
+                        <input th:if="${person!=null}" th:value="${person.mail}" type="email"
+                               th:class="${#fields.hasErrors('mail')}?'form-control is-invalid':'form-control'"
+                               name="mail" id="mail1"
                                min="1" max="40"
                                placeholder="mail"
                                required="required"/>
-                        <input th:if="${person==null}" th:field="*{mailPerson}" type="email"
-                               th:class="${#fields.hasErrors('mailPerson')}?'form-control is-invalid':'form-control'"
+                        <input th:if="${person==null}" th:field="*{mail}" type="email"
+                               th:class="${#fields.hasErrors('mail')}?'form-control is-invalid':'form-control'"
                                name="surname" id="mail2"
                                min="1" max="40"
                                placeholder="mail"
                                required="required"/>
-                        <div th:if="${#fields.hasErrors('mailPerson')}" th:errors="*{mailPerson}"
+                        <div th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"
                              class="invalid-feedback text-white"></div>
                     </div>
                     <div class="form-group" th:if="${person!=null}">
@@ -108,19 +108,19 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-user"></i></span>
                         </div>
-                        <input th:if="${person!=null}" th:value="${person.loginPerson}" type="text"
-                               th:class="${#fields.hasErrors('loginPerson')}?'form-control is-invalid':'form-control'"
-                               name="loginPerson" id="username1"
+                        <input th:if="${person!=null}" th:value="${person.login}" type="text"
+                               th:class="${#fields.hasErrors('login')}?'form-control is-invalid':'form-control'"
+                               name="login" id="username1"
                                min="1" max="40"
                                placeholder="логин"
                                required="required"/>
-                        <input th:if="${person==null}" th:field="*{loginPerson}" type="text"
-                               th:class="${#fields.hasErrors('loginPerson')}?'form-control is-invalid':'form-control'"
+                        <input th:if="${person==null}" th:field="*{login}" type="text"
+                               th:class="${#fields.hasErrors('login')}?'form-control is-invalid':'form-control'"
                                name="username" id="username2"
                                min="1" max="40"
                                placeholder="логин"
                                required="required"/>
-                        <div th:if="${#fields.hasErrors('loginPerson')}" th:errors="*{loginPerson}"
+                        <div th:if="${#fields.hasErrors('login')}" th:errors="*{login}"
                              class="invalid-feedback text-white"></div>
                     </div>
 
@@ -128,16 +128,16 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-key"></i></span>
                         </div>
-                        <input th:field="*{passwordPerson}" type="password"
-                               th:class="${#fields.hasErrors('passwordPerson')}?'form-control is-invalid':'form-control'"
+                        <input th:field="*{password}" type="password"
+                               th:class="${#fields.hasErrors('password')}?'form-control is-invalid':'form-control'"
                                min="2" max="40"
                                name="password" id="password"
                                placeholder="пароль" required="required"/>
 
-                        <div th:if="${#fields.hasErrors('passwordPerson')}" th:errors="*{passwordPerson}"
+                        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
                              class="invalid-feedback text-white"></div>
                     </div>
-                    <input th:if="${person!=null}" th:value="${person.passwordPerson}" name="passwordPerson"
+                    <input th:if="${person!=null}" th:value="${person.password}" name="password"
                            type="hidden">
                     <div class="form-group">
                         <input type="submit" th:value="${person!=null}?'Изменить':'Регистрация'"

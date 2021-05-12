@@ -1,9 +1,15 @@
 package com.nc.model;
 
 import com.nc.enums.Status;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -18,69 +24,8 @@ public class Order {
     @JoinColumn(name = "hardware_id")
     private Hardware hardware;
     @Column(name = "count")
-    private int countOrder;
+    private int count;
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private Status status;
-
-    public Order() {
-    }
-
-    public Order(Person person, Hardware hardware, int countOrder, Status status) {
-        this.person = person;
-        this.hardware = hardware;
-        this.countOrder = countOrder;
-        this.status = status;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
-
-    public Hardware getHardware() {
-        return hardware;
-    }
-
-    public void setHardware(Hardware hardware) {
-        this.hardware = hardware;
-    }
-
-    public int getCountOrder() {
-        return countOrder;
-    }
-
-    public void setCountOrder(int countOrder) {
-        this.countOrder = countOrder;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", person_id=" + person.getId() +
-                ", hardware_id=" + hardware.getId() +
-                ", countOrder=" + countOrder +
-                ", status=" + status.toString() +
-                '}';
-    }
 }

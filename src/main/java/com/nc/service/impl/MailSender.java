@@ -1,21 +1,20 @@
 package com.nc.service.impl;
 
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class MailSender {
-    private final static Logger LOGGER = Logger.getLogger(MailSender.class);
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender javaMailSender;
 
     @Value("${spring.mail.username}")
     private String username;
-
 
     public void send(String emailTo, String subject, String message) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -23,7 +22,7 @@ public class MailSender {
         mailMessage.setTo(emailTo);
         mailMessage.setSubject(subject);
         mailMessage.setText(message);
-        LOGGER.info("Sending a message.");
-        mailSender.send(mailMessage);
+        log.info("Sending a message.");
+        javaMailSender.send(mailMessage);
     }
 }

@@ -1,7 +1,7 @@
 package com.nc.config;
 
-
 import com.nc.service.impl.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,19 +12,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.sql.DataSource;
-
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
-
-
-    @Autowired
-    DataSource dataSource;
-    @Autowired
-    UserService userService;
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
@@ -51,9 +43,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+    public void configure(AuthenticationManagerBuilder auth, PasswordEncoder passwordEncoder) throws Exception {
         auth.userDetailsService(userService)
-                .passwordEncoder(getPasswordEncoder());
+                .passwordEncoder(passwordEncoder);
     }
-
 }

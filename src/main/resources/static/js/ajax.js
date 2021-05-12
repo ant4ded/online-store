@@ -25,14 +25,11 @@ function fire_ajax_submit() {
                 var i = 0;
                 var j = 5;
                 var characteristics = hardware["characteristics"]
-
-                var ratingId = 'rating' + hardware["id"];
-
                 while (i < characteristics.length) {
                     if (i >= j) {
                         break;
                     }
-                    characteristicHtml += characteristics[i]["nameCharacteristic"] + ": " + characteristics[i]["valueCharacteristic"];
+                    characteristicHtml += characteristics[i]["name"] + ": " + characteristics[i]["value"];
                     if (i === characteristics.length - 1 || i === j - 1) {
                         characteristicHtml += ". ";
                     } else {
@@ -47,18 +44,18 @@ function fire_ajax_submit() {
                     "   <div class=\"one-product\">" +
                     "       <div class=\"thumbnail\">" +
                     "           <a href=\"/catalog/good?hardwareId=" + hardware["id"] + "\">" +
-                    "               <img src=\"data:image/png;base64," + hardware["imageHardware"] + " class=\"pd-10 w-100\" height=\"200\">" +
+                    "               <img src=\"data:image/png;base64," + hardware["image"] + " class=\"pd-10 w-100\" height=\"200\">" +
                     "           </a>" +
                     "           <div class=\"caption\">" +
                     "               <div class=\"row\">" +
                     "                   <div class=\"col-md-12 text-center col-xs-6\">" +
                     "                       <h4 class=\"name-product\">" +
-                    "                           <a href=\"catalog/good?hardwareId=" + hardware["id"] + "\">" + hardware["nameHardware"] + "</a>" +
+                    "                           <a href=\"catalog/good?hardwareId=" + hardware["id"] + "\">" + hardware["name"] + "</a>" +
                     "                       </h4>" +
                     "                       <h6 class=\"characteristics\">" + characteristicHtml + "</h6>" +
                     "                   </div>" +
                     "                   <div class=\"col-md-12 col-xs-6 price\">" +
-                    "                       <h4 class=\"text-center\"><label>" + hardware["priceHardware"] + " РУБ</label></h4>" +
+                    "                       <h4 class=\"text-center\"><label>" + hardware["price"] + " РУБ</label></h4>" +
                     "                       <div class=\"text-center\"><label class=\"badge badge-primary text-wrap\" style=\"padding: 0.65em .6em;background-color: black;\">" + currency[cur] + " USD</label></div>" +
                     "                   </div>" +
                     "               </div>" +

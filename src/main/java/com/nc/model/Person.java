@@ -4,6 +4,9 @@ import com.nc.annotation.CheckOnEmail;
 import com.nc.annotation.CheckOnHtml;
 import com.nc.annotation.CheckOnNumber;
 import com.nc.enums.Role;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +19,9 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "person")
 public class Person implements UserDetails {
@@ -29,120 +35,35 @@ public class Person implements UserDetails {
     @CheckOnNumber(message = "Уберите цифры из имени")
     @Length(max = 255, message = "Слишком длинное значение")
     @CheckOnHtml(message = "Некорректный ввод. Присутсвуют теги html.")
-    private String namePerson;
+    private String name;
     @Column(name = "surname")
     @NotBlank(message = "Заполните поле")
     @Length(max = 255, message = "Слишком длинное значение")
     @CheckOnNumber(message = "Уберите цифры из фамилии")
     @CheckOnHtml(message = "Некорректный ввод. Присутсвуют теги html.")
-    private String surnamePerson;
+    private String surname;
     @Column(name = "mail")
     @NotBlank(message = "Ошибка")
     @Email(message = "Неверный формат почты")
     @CheckOnEmail(message = "Неверный формат почты")
     @CheckOnHtml(message = "Некорректный ввод. Присутсвуют теги html.")
-    private String mailPerson;
+    private String mail;
     @Column(name = "login")
     @NotBlank(message = "Заполните поле")
     @Length(max = 255, message = "Слишком длинное значение")
     @CheckOnHtml(message = "Некорректный ввод. Присутсвуют теги html.")
-    private String loginPerson;
+    private String login;
     @Column(name = "password")
     @NotBlank(message = "Заполните поле")
     @Length(max = 255, message = "Слишком длинное значение")
     @CheckOnHtml(message = "Некорректный ввод. Присутсвуют теги html.")
-    private String passwordPerson;
+    private String password;
     private boolean active;
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
     @Column(name = "activation_code")
     private String activationCode;
-
-    public Person() {
-    }
-
-    public Person(@NotBlank(message = "Заполните поле") @Length(max = 255, message = "Слишком длинное значение") String namePerson, @NotBlank(message = "Заполните поле") @Length(max = 255, message = "Слишком длинное значение") String surnamePerson, @NotBlank(message = "Ошибка") String mailPerson, @NotBlank(message = "Заполните поле") @Length(max = 255, message = "Слишком длинное значение") String loginPerson, @NotBlank(message = "Заполните поле") @Length(max = 255, message = "Слишком длинное значение") String passwordPerson, boolean active, Role role) {
-        this.namePerson = namePerson;
-        this.surnamePerson = surnamePerson;
-        this.mailPerson = mailPerson;
-        this.loginPerson = loginPerson;
-        this.passwordPerson = passwordPerson;
-        this.active = active;
-        this.role = role;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getNamePerson() {
-        return namePerson;
-    }
-
-    public void setNamePerson(String namePerson) {
-        this.namePerson = namePerson;
-    }
-
-    public String getSurnamePerson() {
-        return surnamePerson;
-    }
-
-    public void setSurnamePerson(String surnamePerson) {
-        this.surnamePerson = surnamePerson;
-    }
-
-    public String getMailPerson() {
-        return mailPerson;
-    }
-
-    public void setMailPerson(String mailPerson) {
-        this.mailPerson = mailPerson;
-    }
-
-    public String getLoginPerson() {
-        return loginPerson;
-    }
-
-    public void setLoginPerson(String loginPerson) {
-        this.loginPerson = loginPerson;
-    }
-
-    public String getPasswordPerson() {
-        return passwordPerson;
-    }
-
-    public void setPasswordPerson(String passwordPerson) {
-        this.passwordPerson = passwordPerson;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public String getActivationCode() {
-        return activationCode;
-    }
-
-    public void setActivationCode(String activationCode) {
-        this.activationCode = activationCode;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -153,12 +74,12 @@ public class Person implements UserDetails {
 
     @Override
     public String getPassword() {
-        return passwordPerson;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return loginPerson;
+        return login;
     }
 
     @Override
@@ -179,19 +100,5 @@ public class Person implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isActive();
-    }
-
-    @Override
-    public String toString() {
-        return "Person{" +
-                "id=" + id +
-                ", namePerson='" + namePerson + '\'' +
-                ", surnamePerson='" + surnamePerson + '\'' +
-                ", mailPerson='" + mailPerson + '\'' +
-                ", loginPerson='" + loginPerson + '\'' +
-                ", passwordPerson='" + passwordPerson + '\'' +
-                ", active=" + active +
-                ", role=" + role.toString() +
-                '}';
     }
 }

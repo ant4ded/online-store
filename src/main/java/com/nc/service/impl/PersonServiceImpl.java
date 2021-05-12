@@ -6,7 +6,8 @@ import com.nc.model.Order;
 import com.nc.model.Person;
 import com.nc.repository.PersonRepository;
 import com.nc.service.PersonService;
-import org.apache.log4j.Logger;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,32 +23,34 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class PersonServiceImpl implements PersonService {
-    private static final Logger LOGGER = Logger.getLogger(PersonServiceImpl.class);
+    private final PersonRepository dao;
+    private final SpringSecurityConfig springSecurityConfig;
+    private final MailSender mailSender;
+    private OrderServiceImpl orderService;
+
     @Autowired
-    PersonRepository dao;
-    @Autowired
-    OrderServiceImpl orderService;
-    @Autowired
-    SpringSecurityConfig springSecurityConfig;
-    @Autowired
-    MailSender mailSender;
+    public void setOrderService(OrderServiceImpl orderService) {
+        this.orderService = orderService;
+    }
 
     @Override
     public List<Person> findAll() {
-        LOGGER.info("Taking data from the database (All users)");
+        log.info("Taking data from the database (All users)");
         return dao.findAll();
     }
 
     @Override
     public Person findByLogin(String login) {
-        LOGGER.info("Taking data from a database (User by a specific login)");
-        return dao.findByLoginPerson(login);
+        log.info("Taking data from a database (User by a specific login)");
+        return dao.findByLogin(login);
     }
 
     @Override
     public void save(Person person) {
-        LOGGER.info("Writing user data to the database");
+        log.info("Writing user data to the database");
         dao.save(person);
     }
 
@@ -59,42 +62,42 @@ public class PersonServiceImpl implements PersonService {
                 return false;
         }
         if (newPassword == null)
-            person.setPasswordPerson(oldPerson.getPassword());
+            person.setPassword(oldPerson.getPassword());
         else {
             PasswordEncoder passwordEncoder = springSecurityConfig.getPasswordEncoder();
-            person.setPasswordPerson(passwordEncoder.encode(newPassword));
+            person.setPassword(passwordEncoder.encode(newPassword));
         }
         person.setActive(oldPerson.isActive());
         person.setRole(oldPerson.getRole());
-        LOGGER.info("Updating user data in the database\n" + person.toString());
+        log.info("Updating user data in the database\n" + person.toString());
         dao.save(person);
-        LOGGER.info("User reauthorization on the site");
+        log.info("User reauthorization on the site");
         Collection<SimpleGrantedAuthority> nowAuthorities = (Collection<SimpleGrantedAuthority>) SecurityContextHolder
                 .getContext().getAuthentication().getAuthorities();
         UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(person.getLoginPerson(), person.getPassword(), nowAuthorities);
+                new UsernamePasswordAuthenticationToken(person.getLogin(), person.getPassword(), nowAuthorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return true;
     }
 
     @Override
     public Person findAuthenticationPerson() {
-        LOGGER.info("Finding an authorized user.");
+        log.info("Finding an authorized user.");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return dao.findByLoginPerson(auth.getName());
+        return dao.findByLogin(auth.getName());
     }
 
     @Override
     public List<Person> findPersonsForAdmin() {
         List<Person> people = dao.findAll();
         people.removeIf(person -> person.getRole().equals(Role.ADMIN));
-        LOGGER.info("Taking data from the database (All users except administrators).");
+        log.info("Taking data from the database (All users except administrators).");
         return people;
     }
 
     @Override
     public Person findById(long id) {
-        LOGGER.info("Taking data from the database (User by ID).");
+        log.info("Taking data from the database (User by ID).");
         return dao.findById(id);
     }
 
@@ -102,7 +105,7 @@ public class PersonServiceImpl implements PersonService {
     public void delete(long id) {
         List<Order> orders = orderService.findByPerson_Id(id);
         orders.forEach(order -> order.setHardware(null));
-        LOGGER.info("Removing user data from the database.");
+        log.info("Removing user data from the database.");
         if (orders.size() != 0)
             orderService.deleteAllByPersonId(id);
         else
@@ -111,7 +114,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public boolean addNewUser(Person person, BindingResult bindingResult, Model model, String urlAddress) {
-        Person userFromDb = findByLogin(person.getLoginPerson());
+        Person userFromDb = findByLogin(person.getLogin());
         PasswordEncoder passwordEncoder = springSecurityConfig.getPasswordEncoder();
         if (userFromDb != null) {
             model.addAttribute("exist_error", "Пользователь существует.");
@@ -121,7 +124,7 @@ public class PersonServiceImpl implements PersonService {
             return true;
 
         } else {
-            person.setPasswordPerson(passwordEncoder.encode(person.getPassword()));
+            person.setPassword(passwordEncoder.encode(person.getPassword()));
             person.setRole(Role.USER);
             person.setActive(false);
             person.setActivationCode(UUID.randomUUID().toString());
@@ -129,11 +132,11 @@ public class PersonServiceImpl implements PersonService {
             String message = String.format(
                     "Hello, %s! \n" +
                             "Welcome to localhost. Please, visit next link: http://localhost:8080/activate/%s",
-                    person.getLoginPerson(),
+                    person.getLogin(),
                     person.getActivationCode()
             );
-            mailSender.send(person.getMailPerson(), "Activation code", message);
-            LOGGER.info("Writing user data to the database.\n" + person.toString());
+            mailSender.send(person.getMail(), "Activation code", message);
+            log.info("Writing user data to the database.\n" + person.toString());
             dao.save(person);
         }
         return false;
@@ -147,7 +150,7 @@ public class PersonServiceImpl implements PersonService {
             return false;
         }
         person.setActive(true);
-        LOGGER.info("Updating user data in the database (Activation).\n" + person.toString());
+        log.info("Updating user data in the database (Activation).\n" + person.toString());
         dao.save(person);
 
         return true;

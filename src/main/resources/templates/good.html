@@ -3,7 +3,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title th:text="${hardware!=null}? ${hardware.nameHardware} :'Ошибка'"></title>
+    <title th:text="${hardware!=null}? ${hardware.name} :'Ошибка'"></title>
 
     <div th:replace="fragments/header :: header-css"></div>
 
@@ -14,7 +14,7 @@
 <div class="container-fluid">
     <div class="row">
         <section class="title col-md-12">
-            <h1 class="text-center" th:text="${hardware!=null}? ${hardware.nameHardware} :'Каталог'"></h1>
+            <h1 class="text-center" th:text="${hardware!=null}? ${hardware.name} :'Каталог'"></h1>
         </section>
         <section class="container pd">
             <div class="row">
@@ -24,7 +24,7 @@
                             <h3 class="text-white">Каталог</h3>
                         </li>
                         <li th:each="category:${categories}" class="col-md-12">
-                            <a th:href="@{/catalog(categoryId=${category.id})}">[[${category.nameCategory}]]</a>
+                            <a th:href="@{/catalog(categoryId=${category.id})}">[[${category.name}]]</a>
                         </li>
                     </ul>
                 </div>
@@ -41,10 +41,10 @@
                             </div>
                         </div> <!-- /col-sm-6 -->
                         <div class="col-md-6">
-                            <h3 class="title-product">[[${hardware.nameHardware}]]</h3>
+                            <h3 class="title-product">[[${hardware.name}]]</h3>
                             <h3 class="text-center">Описание</h3>
                             <div class="pd-10">
-                                <p>[[${hardware.descriptionHardware}]] </p>
+                                <p>[[${hardware.description}]] </p>
                             </div>
                             <div>
                                 <input id="toggle-heart" type="checkbox">
@@ -65,8 +65,8 @@
                             </tr>
                             </thead>
                             <tr th:each="charact:${hardware.characteristics}">
-                                <td th:utext="${charact.nameCharacteristic}"></td>
-                                <td th:utext="${charact.valueCharacteristic}"></td>
+                                <td th:utext="${charact.name}"></td>
+                                <td th:utext="${charact.value}"></td>
                             </tr>
                         </table>
                     </div>

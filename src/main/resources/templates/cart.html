@@ -78,11 +78,11 @@
         </tr>
         </thead>
         <tr th:each="order:${orders}">
-            <td th:utext="${order.getHardware().getNameHardware()} "></td>
-            <td class="text-center" th:utext="${order.getHardware().priceHardware*order.getCountOrder()} +' РУБ | '
-            + ${#numbers.formatDecimal(order.getHardware().priceHardware*order.getCountOrder()/currency,0,2)}+' USD'"></td>
+            <td th:utext="${order.getHardware().getName()} "></td>
+            <td class="text-center" th:utext="${order.getHardware().price*order.count} +' РУБ | '
+            + ${#numbers.formatDecimal(order.getHardware().price*order.count/currency,0,2)}+' USD'"></td>
 
-            <td th:utext="${order.countOrder}"></td>
+            <td th:utext="${order.count}"></td>
             <td th:if="${order.status.toString().equals('IN_CART')}">Не оформлен</td>
             <td style="text-align: center; word-spacing: 10px;">
                 <form method="post" th:action="@{/delete(orderId=${order.id})}" th:object="${order}"

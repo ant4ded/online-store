@@ -116,18 +116,18 @@
                                     <div class="col-md-12 text-center col-xs-6">
                                         <h4 class="name-product">
                                             <a th:href="@{/catalog/good(hardwareId=${hardware.id})}">
-                                                [[${hardware.nameHardware}]]
+                                                [[${hardware.name}]]
                                             </a>
                                         </h4>
                                     </div>
                                     <div class="col-md-12 col-xs-6 price">
                                         <h4 class="text-center">
-                                            <label>[[${hardware.priceHardware}]] РУБ</label>
+                                            <label>[[${hardware.price}]] РУБ</label>
                                         </h4>
                                         <div class="text-center">
                                             <label class="badge badge-primary text-wrap"
                                                    style="padding: 0.65em .6em;background-color: black;"
-                                                   th:text="${#numbers.formatDecimal(hardware.priceHardware/currency,0,2)}+' USD'"></label>
+                                                   th:text="${#numbers.formatDecimal(hardware.price/currency,0,2)}+' USD'"></label>
                                         </div>
                                     </div>
                                 </div>

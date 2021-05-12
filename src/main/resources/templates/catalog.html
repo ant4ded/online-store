@@ -3,7 +3,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title th:text="${category!=null}? ${category.nameCategory} :'Каталог'"></title>
+    <title th:text="${category!=null}? ${category.name} :'Каталог'"></title>
 
     <div th:replace="fragments/header :: header-css"></div>
 
@@ -15,7 +15,7 @@
 
     <div class="row">
         <section class="title col-md-12">
-            <h1 class="text-center" th:text="${category!=null}? ${category.nameCategory} :'Каталог'"></h1>
+            <h1 class="text-center" th:text="${category!=null}? ${category.name} :'Каталог'"></h1>
         </section>
         <section class="container pd">
             <div class="row">
@@ -25,7 +25,7 @@
                             <h3 class="text-white">Каталог</h3>
                         </li>
                         <li th:each="category:${categories}" class="col-md-12">
-                            <a th:href="@{/catalog(categoryId=${category.id})}">[[${category.nameCategory}]]</a>
+                            <a th:href="@{/catalog(categoryId=${category.id})}">[[${category.name}]]</a>
                         </li>
                         <li th:if="${characts != null}" class="nav-header filter col-md-12">
                             <h3 class="text-white">Фильтр</h3>
@@ -33,10 +33,10 @@
                         <form id="my_filter" class="col-md-12">
                             <li th:if="${characts != null}" th:each="items:${characts}" class="col-md-12">
                                 <ul class="col-md-12" th:each="item, iStat:${items}">
-                                    <li class="col-md-12" th:if="${iStat.first}">[[${item.nameCharacteristic}]]:</li>
+                                    <li class="col-md-12" th:if="${iStat.first}">[[${item.name}]]:</li>
                                     <input type="checkbox" id="characteristic" name="characteristic"
                                            th:value="${item.getId()}">
-                                    <span>[[${item.valueCharacteristic}]]</span>
+                                    <span>[[${item.value}]]</span>
                                 </ul>
                             </li>
                         </form>

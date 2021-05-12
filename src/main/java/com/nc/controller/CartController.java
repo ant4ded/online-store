@@ -4,9 +4,12 @@ import com.nc.enums.Status;
 import com.nc.model.Category;
 import com.nc.model.Order;
 import com.nc.model.Person;
-import com.nc.service.impl.*;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.nc.service.impl.CategoryServiceImpl;
+import com.nc.service.impl.CurrencySingleton;
+import com.nc.service.impl.OrderServiceImpl;
+import com.nc.service.impl.PersonServiceImpl;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,22 +21,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 @PreAuthorize("hasAnyAuthority('ADMIN','USER','MANAGER')")
+@RequiredArgsConstructor
 public class CartController {
-    private final static Logger LOGGER = Logger.getLogger(CartController.class);
-    @Autowired
-    CategoryServiceImpl categoryService;
-    @Autowired
-    PersonServiceImpl personService;
-    @Autowired
-    OrderServiceImpl orderService;
-    @Autowired
-    HardwareServiceImpl hardwareService;
+    private final CategoryServiceImpl categoryService;
+    private final PersonServiceImpl personService;
+    private final OrderServiceImpl orderService;
 
     @RequestMapping(value = "/cart", method = RequestMethod.GET)
     public String cart(Model model) {
-        LOGGER.info("Go to user’s cart page");
+        log.info("Go to user’s cart page");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Person person = personService.findByLogin(auth.getName());
         List<Category> categories = categoryService.findAll();
@@ -48,14 +47,14 @@ public class CartController {
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String deleteOrder(@RequestParam(name = "orderId") long idOrder) {
-        LOGGER.info("Delete order");
+        log.info("Delete order");
         orderService.delete(idOrder);
         return "redirect:cart";
     }
 
     @RequestMapping(value = "/checkout", method = RequestMethod.GET)
     public String checkoutOrders(Model model) {
-        LOGGER.info("Checkout orders");
+        log.info("Checkout orders");
         if (!orderService.checkoutOrdersForUser()) {
             model.addAttribute("message_busy", "Один или несколько из товаров не были оформлены. " +
                     "Причина: отсутсвие товара в наличи, возможно его заказали первее Вас.");

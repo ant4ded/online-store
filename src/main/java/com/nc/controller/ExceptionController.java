@@ -1,6 +1,6 @@
 package com.nc.controller;
 
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
@@ -10,15 +10,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 
+@Slf4j
 @RestController
 public class ExceptionController implements ErrorController {
-
-    private final static Logger LOGGER = Logger.getLogger(ExceptionController.class);
-
     @RequestMapping("/error")
     public ModelAndView handleError(HttpServletResponse response, Model model) {
         ModelAndView modelAndView = new ModelAndView();
-        LOGGER.warn("There was an error on the page:\n" + response.getStatus());
+        log.warn("There was an error on the page:\n" + response.getStatus());
         if (response.getStatus() == HttpStatus.BAD_REQUEST.value()) {
             modelAndView.setViewName("error");
             model.addAttribute("message", "400");

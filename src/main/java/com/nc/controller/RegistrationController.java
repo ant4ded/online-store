@@ -4,8 +4,8 @@ import com.nc.model.Category;
 import com.nc.model.Person;
 import com.nc.service.impl.CategoryServiceImpl;
 import com.nc.service.impl.PersonServiceImpl;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,18 +15,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
+@Slf4j
 @Controller
+@RequiredArgsConstructor
 public class RegistrationController {
-    private final static Logger LOGGER = Logger.getLogger(RegistrationController.class);
-    @Autowired
-    PersonServiceImpl personService;
-    @Autowired
-    CategoryServiceImpl categoryService;
-
+    private final PersonServiceImpl personService;
+    private final CategoryServiceImpl categoryService;
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
-        LOGGER.info("Go to the registration page.");
+        log.info("Go to the registration page.");
         List<Category> categories = categoryService.findAll();
         model.addAttribute("categories", categories);
         model.addAttribute("personForm", new Person());
@@ -35,11 +33,9 @@ public class RegistrationController {
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String registration(@ModelAttribute("personForm") @Valid Person person, BindingResult bindingResult, Model model, HttpServletRequest request) {
-
         if (personService.addNewUser(person, bindingResult, model, request.getLocalAddr())) return "registration";
-        LOGGER.info("New User Registration.");
+        log.info("New User Registration.");
         return "redirect:/login";
-
     }
 
     @GetMapping("/activate/{code}")
@@ -49,13 +45,12 @@ public class RegistrationController {
         model.addAttribute("categories", categories);
         if (isActivated) {
             model.addAttribute("message", "Ваша активация прошла успешно");
-            LOGGER.info("New user activation.");
+            log.info("New user activation.");
         } else {
             model.addAttribute("message", "Код активации не найден!");
-            LOGGER.info("Activation code not found!(" + code + ")");
+            log.info("Activation code not found!(" + code + ")");
         }
         model.addAttribute("isActivated", isActivated);
         return "login";
     }
-
 }
