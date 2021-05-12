@@ -8,6 +8,6 @@ public class CheckOnHtmlValidator implements ConstraintValidator<CheckOnHtml, St
 
     @Override
     public boolean isValid(String startLine, ConstraintValidatorContext constraintValidatorContext) {
-        return startLine.matches(HTML_TAGS_REGEX);
+        return !startLine.matches(HTML_TAGS_REGEX);
     }
 }
