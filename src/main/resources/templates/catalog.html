@@ -35,7 +35,7 @@
                                 <ul class="col-md-12" th:each="item, iStat:${items}">
                                     <li class="col-md-12" th:if="${iStat.first}">[[${item.name}]]:</li>
                                     <input type="checkbox" id="characteristic" name="characteristic"
-                                           th:value="${item.getId()}">
+                                           th:value="${item.id()}">
                                     <span>[[${item.value}]]</span>
                                 </ul>
                             </li>
