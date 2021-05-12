@@ -78,7 +78,7 @@
         </tr>
         </thead>
         <tr th:each="order:${orders}">
-            <td th:utext="${order.hardware.getName()} "></td>
+            <td th:utext="${order.hardware.name} "></td>
             <td class="text-center" th:utext="${order.hardware.price*order.count} +' РУБ | '
             + ${#numbers.formatDecimal(order.hardware.price*order.count/currency,0,2)}+' USD'"></td>
 
