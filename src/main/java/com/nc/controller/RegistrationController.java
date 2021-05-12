@@ -1,9 +1,9 @@
 package com.nc.controller;
 
 import com.nc.model.Category;
-import com.nc.model.Person;
+import com.nc.model.User;
 import com.nc.service.impl.CategoryServiceImpl;
-import com.nc.service.impl.PersonServiceImpl;
+import com.nc.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class RegistrationController {
-    private final PersonServiceImpl personService;
+    private final UserServiceImpl userService;
     private final CategoryServiceImpl categoryService;
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
@@ -27,20 +27,20 @@ public class RegistrationController {
         log.info("Go to the registration page.");
         List<Category> categories = categoryService.findAll();
         model.addAttribute("categories", categories);
-        model.addAttribute("personForm", new Person());
+        model.addAttribute("userForm", new User());
         return "registration";
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String registration(@ModelAttribute("personForm") @Valid Person person, BindingResult bindingResult, Model model, HttpServletRequest request) {
-        if (personService.addNewUser(person, bindingResult, model, request.getLocalAddr())) return "registration";
+    public String registration(@ModelAttribute("userForm") @Valid User user, BindingResult bindingResult, Model model, HttpServletRequest request) {
+        if (userService.addNewUser(user, bindingResult, model, request.getLocalAddr())) return "registration";
         log.info("New User Registration.");
         return "redirect:/login";
     }
 
     @GetMapping("/activate/{code}")
     public String activate(Model model, @PathVariable String code) {
-        boolean isActivated = personService.activateUser(code);
+        boolean isActivated = userService.activateUser(code);
         List<Category> categories = categoryService.findAll();
         model.addAttribute("categories", categories);
         if (isActivated) {

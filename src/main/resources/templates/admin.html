@@ -64,21 +64,21 @@
                     <th class="text-center">Действие</th>
                 </tr>
                 </thead>
-                <tr th:each="person:${people}">
-                    <td th:utext="${person.name} "></td>
-                    <td th:utext="${person.surname}"></td>
+                <tr th:each="user:${people}">
+                    <td th:utext="${user.name} "></td>
+                    <td th:utext="${user.surname}"></td>
 
-                    <td th:utext="${person.mail}"></td>
-                    <td th:utext="${person.login}"></td>
-                    <td th:utext="${person.role.toString()}"></td>
-                    <td th:if="${person.active}">Активирован</td>
-                    <td th:if="${!person.active}">Не активирован</td>
+                    <td th:utext="${user.mail}"></td>
+                    <td th:utext="${user.login}"></td>
+                    <td th:utext="${user.role.toString()}"></td>
+                    <td th:if="${user.active}">Активирован</td>
+                    <td th:if="${!user.active}">Не активирован</td>
                     <td style="text-align: center; word-spacing: 10px;">
                         <a class="btn btn-info" style="padding: 5px 10px;"
-                           th:href="@{/update(personId=${person.id})}"><i
+                           th:href="@{/update(userId=${user.id})}"><i
                                 class="fa fa-retweet"></i></a>
 
-                        <form method="post" th:action="@{/delete-person(personId=${person.id})}" th:object="${person}"
+                        <form method="post" th:action="@{/delete-user(userId=${user.id})}" th:object="${user}"
                               style="display:inline;">
                             <button class="btn btn-danger" style="padding: 5px 10px" type="submit"><i
                                     class="fa fa-trash"></i></button>
@@ -395,8 +395,8 @@
                     <td th:utext="${order.hardware.name} "></td>
                     <td th:utext="${order.count}"></td>
                     <td th:utext="${order.hardware.price*order.count}"></td>
-                    <td>[[${order.person.name}]] [[${order.person.surname}]];<br/>
-                        [[${order.person.mail}]]
+                    <td>[[${order.user.name}]] [[${order.user.surname}]];<br/>
+                        [[${order.user.mail}]]
                     </td>
                     <td th:if="${order.status.toString().equals('IN_CART')}">Не оформлен</td>
                     <td th:if="${order.status.toString().equals('IN_PROCESSING')}">В ожидании ответа</td>

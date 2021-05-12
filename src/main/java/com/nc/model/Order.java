@@ -15,17 +15,15 @@ import javax.persistence.*;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_id")
     private long id;
+    private int count;
+    @Column(columnDefinition = "ENUM('IN_CART', 'IN_PROCESSING', 'DELIVERED')")
+    private Status status;
+
     @ManyToOne
-    @JoinColumn(name = "person_id")
-    private Person person;
+    @JoinColumn(name = "user_id")
+    private User user;
     @ManyToOne
     @JoinColumn(name = "hardware_id")
     private Hardware hardware;
-    @Column(name = "count")
-    private int count;
-    @Column(name = "status")
-    @Enumerated(EnumType.STRING)
-    private Status status;
 }

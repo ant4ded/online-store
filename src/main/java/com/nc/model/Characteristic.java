@@ -14,23 +14,21 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "characteristic")
+@Table(name = "characteristics")
 public class Characteristic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @DecimalMin(value = "0.00")
-    @Column(name = "characteristic_id")
     private long id;
     @NotBlank(message = "Заполните поле")
     @Length(max = 255, message = "Слишком длинное значение")
     @CheckOnHtml(message = "Некорректный ввод. Присутсвуют теги html.")
-    @Column(name = "name")
     private String name;
     @NotBlank(message = "Заполните поле")
     @Length(max = 255, message = "Слишком длинное значение")
     @CheckOnHtml(message = "Некорректный ввод. Присутсвуют теги html.")
-    @Column(name = "value")
     private String value;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;

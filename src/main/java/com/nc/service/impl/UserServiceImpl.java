@@ -3,9 +3,9 @@ package com.nc.service.impl;
 import com.nc.config.SpringSecurityConfig;
 import com.nc.enums.Role;
 import com.nc.model.Order;
-import com.nc.model.Person;
-import com.nc.repository.PersonRepository;
-import com.nc.service.PersonService;
+import com.nc.model.User;
+import com.nc.repository.UserRepository;
+import com.nc.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +25,8 @@ import java.util.UUID;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class PersonServiceImpl implements PersonService {
-    private final PersonRepository dao;
+public class UserServiceImpl implements UserService {
+    private final UserRepository dao;
     private final SpringSecurityConfig springSecurityConfig;
     private final MailSender mailSender;
     private OrderServiceImpl orderService;
@@ -37,84 +37,84 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<Person> findAll() {
+    public List<User> findAll() {
         log.info("Taking data from the database (All users)");
         return dao.findAll();
     }
 
     @Override
-    public Person findByLogin(String login) {
+    public User findByLogin(String login) {
         log.info("Taking data from a database (User by a specific login)");
         return dao.findByLogin(login);
     }
 
     @Override
-    public void save(Person person) {
+    public void save(User user) {
         log.info("Writing user data to the database");
-        dao.save(person);
+        dao.save(user);
     }
 
     @Override
-    public boolean update(Person person, String confPassword, String newPassword) {
-        Person oldPerson = dao.findById(person.getId());
+    public boolean update(User user, String confPassword, String newPassword) {
+        User oldUser = dao.findById(user.getId());
         if (confPassword != null) {
             if (!newPassword.equals(confPassword))
                 return false;
         }
         if (newPassword == null)
-            person.setPassword(oldPerson.getPassword());
+            user.setPassword(oldUser.getPassword());
         else {
             PasswordEncoder passwordEncoder = springSecurityConfig.getPasswordEncoder();
-            person.setPassword(passwordEncoder.encode(newPassword));
+            user.setPassword(passwordEncoder.encode(newPassword));
         }
-        person.setActive(oldPerson.isActive());
-        person.setRole(oldPerson.getRole());
-        log.info("Updating user data in the database\n" + person.toString());
-        dao.save(person);
+        user.setActive(oldUser.isActive());
+        user.setRole(oldUser.getRole());
+        log.info("Updating user data in the database\n" + user.toString());
+        dao.save(user);
         log.info("User reauthorization on the site");
         Collection<SimpleGrantedAuthority> nowAuthorities = (Collection<SimpleGrantedAuthority>) SecurityContextHolder
                 .getContext().getAuthentication().getAuthorities();
         UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(person.getLogin(), person.getPassword(), nowAuthorities);
+                new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword(), nowAuthorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return true;
     }
 
     @Override
-    public Person findAuthenticationPerson() {
+    public User findAuthenticationUser() {
         log.info("Finding an authorized user.");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return dao.findByLogin(auth.getName());
     }
 
     @Override
-    public List<Person> findPersonsForAdmin() {
-        List<Person> people = dao.findAll();
-        people.removeIf(person -> person.getRole().equals(Role.ADMIN));
+    public List<User> findUsersForAdmin() {
+        List<User> people = dao.findAll();
+        people.removeIf(user -> user.getRole().equals(Role.ADMIN));
         log.info("Taking data from the database (All users except administrators).");
         return people;
     }
 
     @Override
-    public Person findById(long id) {
+    public User findById(long id) {
         log.info("Taking data from the database (User by ID).");
         return dao.findById(id);
     }
 
     @Override
     public void delete(long id) {
-        List<Order> orders = orderService.findByPerson_Id(id);
+        List<Order> orders = orderService.findByUser_Id(id);
         orders.forEach(order -> order.setHardware(null));
         log.info("Removing user data from the database.");
         if (orders.size() != 0)
-            orderService.deleteAllByPersonId(id);
+            orderService.deleteAllByUserId(id);
         else
             dao.deleteById(id);
     }
 
     @Override
-    public boolean addNewUser(Person person, BindingResult bindingResult, Model model, String urlAddress) {
-        Person userFromDb = findByLogin(person.getLogin());
+    public boolean addNewUser(User user, BindingResult bindingResult, Model model, String urlAddress) {
+        User userFromDb = findByLogin(user.getLogin());
         PasswordEncoder passwordEncoder = springSecurityConfig.getPasswordEncoder();
         if (userFromDb != null) {
             model.addAttribute("exist_error", "Пользователь существует.");
@@ -124,34 +124,34 @@ public class PersonServiceImpl implements PersonService {
             return true;
 
         } else {
-            person.setPassword(passwordEncoder.encode(person.getPassword()));
-            person.setRole(Role.USER);
-            person.setActive(false);
-            person.setActivationCode(UUID.randomUUID().toString());
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setRole(Role.USER);
+            user.setActive(false);
+            user.setActivationCode(UUID.randomUUID().toString());
 
             String message = String.format(
                     "Hello, %s! \n" +
                             "Welcome to localhost. Please, visit next link: http://localhost:8080/activate/%s",
-                    person.getLogin(),
-                    person.getActivationCode()
+                    user.getLogin(),
+                    user.getActivationCode()
             );
-            mailSender.send(person.getMail(), "Activation code", message);
-            log.info("Writing user data to the database.\n" + person.toString());
-            dao.save(person);
+            mailSender.send(user.getMail(), "Activation code", message);
+            log.info("Writing user data to the database.\n" + user.toString());
+            dao.save(user);
         }
         return false;
     }
 
     @Override
     public boolean activateUser(String code) {
-        Person person = dao.findByActivationCode(code);
+        User user = dao.findByActivationCode(code);
 
-        if (person == null) {
+        if (user == null) {
             return false;
         }
-        person.setActive(true);
-        log.info("Updating user data in the database (Activation).\n" + person.toString());
-        dao.save(person);
+        user.setActive(true);
+        log.info("Updating user data in the database (Activation).\n" + user.toString());
+        dao.save(user);
 
         return true;
     }
