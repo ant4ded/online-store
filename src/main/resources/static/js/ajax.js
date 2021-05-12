@@ -63,7 +63,7 @@ function fire_ajax_submit() {
                     "                   <div class=\"col-md-12\" style=\"padding-top: 5%;\">" +
                     "                       <form method=\"post\" action=\"catalog/add?hardwareId=" + hardware["id"] + "\" style=\"display:inline;\">" +
                     "                           <div class=\"star-ratings-sprite\">" +
-                    "                               <span id=\"rating" + hardware["id"] + "\" class=\"star-ratings-sprite-rating\" style='width: " + (Math.floor(Math.random() * 101)) + "%'></span>" +
+                    "                               <span id=\"rating" + hardware["id"] + "\" class=\"star-ratings-sprite-rating\" style='width: " + (60 + Math.floor(Math.random() * 41)) + "%'></span>" +
                     "                           </div>" +
                     "                           <input type=\"hidden\"  name=\"count\" value=\"1\">" +
                     "                           <button class=\"btn btn-success btn-product float-right\" type=\"submit\">В корзину</button>" +
