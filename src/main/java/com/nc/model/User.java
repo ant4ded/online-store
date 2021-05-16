@@ -50,6 +50,7 @@ public class User implements UserDetails {
     @CheckOnHtml(message = "Некорректный ввод. Присутсвуют теги html.")
     private String password;
     private boolean active;
+    @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "ENUM('USER', 'MANAGER', 'ADMIN')")
     private Role role;
     private String activationCode;

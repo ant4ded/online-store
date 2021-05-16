@@ -17,6 +17,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private int count;
+    @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "ENUM('IN_CART', 'IN_PROCESSING', 'DELIVERED')")
     private Status status;
 
