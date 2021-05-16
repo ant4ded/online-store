@@ -3,11 +3,11 @@ package com.nc.controller;
 import com.nc.enums.Status;
 import com.nc.model.Category;
 import com.nc.model.Order;
-import com.nc.model.Person;
+import com.nc.model.User;
 import com.nc.service.impl.CategoryServiceImpl;
 import com.nc.service.impl.CurrencySingleton;
 import com.nc.service.impl.OrderServiceImpl;
-import com.nc.service.impl.PersonServiceImpl;
+import com.nc.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,16 +27,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CartController {
     private final CategoryServiceImpl categoryService;
-    private final PersonServiceImpl personService;
+    private final UserServiceImpl userService;
     private final OrderServiceImpl orderService;
 
     @RequestMapping(value = "/cart", method = RequestMethod.GET)
     public String cart(Model model) {
         log.info("Go to user’s cart page");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Person person = personService.findByLogin(auth.getName());
+        User user = userService.findByLogin(auth.getName());
         List<Category> categories = categoryService.findAll();
-        List<Order> orders = orderService.findByPersonAndStatus(person, Status.IN_CART);
+        List<Order> orders = orderService.findByUserAndStatus(user, Status.IN_CART);
         double totalPrice = orderService.createTotalCost(orders);
         model.addAttribute("currency", CurrencySingleton.getDollarCurrency());
         model.addAttribute("totalPrice", totalPrice);

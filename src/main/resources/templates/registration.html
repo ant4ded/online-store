@@ -15,28 +15,28 @@
     <div class="d-flex justify-content-center h-100 col-md-12">
         <div class="card col-md-6">
             <div class="card-header">
-                <h3 class="text-center" th:text="${person!=null}?'Изменить':'Регистрация'"></h3>
+                <h3 class="text-center" th:text="${user!=null}?'Изменить':'Регистрация'"></h3>
             </div>
             <div class="card-body mt-4">
-                <form th:action="${person} ? @{/update}: @{/registration}" th:object="${personForm}" method="post">
-                    <span th:if="${person != null}">
-                        <input th:value="${person.id}" name="id" type="hidden">
+                <form th:action="${user} ? @{/update}: @{/registration}" th:object="${userForm}" method="post">
+                    <span th:if="${user != null}">
+                        <input th:value="${user.id}" name="id" type="hidden">
                     </span>
                     <div th:if="${exist_error!=null}" class="alert alert-danger">
                         [[${exist_error}]]
                     </div>
                     <div class="input-group form-group">
 
-                        <label class="text-white col-md-12" th:if="${person!=null}" style="padding: 0;"><h5>Имя:</h5>
+                        <label class="text-white col-md-12" th:if="${user!=null}" style="padding: 0;"><h5>Имя:</h5>
                         </label>
-                        <input th:if="${person!=null}" th:value="${person.name}" type="text"
+                        <input th:if="${user!=null}" th:value="${user.name}" type="text"
                                th:class="${#fields.hasErrors('name')}?'form-control is-invalid':'form-control'"
                                name="name"
                                id="name1" min="1" max="40"
                                placeholder="имя"
                                required="required"/>
 
-                        <input th:if="${person==null}" th:field="*{name}" type="text"
+                        <input th:if="${user==null}" th:field="*{name}" type="text"
                                th:class="${#fields.hasErrors('name')}?'form-control is-invalid':'form-control'"
                                name="name" id="name2" min="1" max="40"
                                placeholder="имя"
@@ -45,15 +45,15 @@
                              class="invalid-feedback text-white"></div>
                     </div>
                     <div class="input-group form-group">
-                        <label class="text-white col-md-12" th:if="${person!=null}" style="padding: 0;"><h5>
+                        <label class="text-white col-md-12" th:if="${user!=null}" style="padding: 0;"><h5>
                             Фамилия:</h5></label>
-                        <input th:if="${person!=null}" th:value="${person.surname}" type="text"
+                        <input th:if="${user!=null}" th:value="${user.surname}" type="text"
                                th:class="${#fields.hasErrors('surname')}?'form-control is-invalid':'form-control'"
                                name="surname" id="surname1"
                                min="1" max="40"
                                placeholder="фамилия"
                                required="required"/>
-                        <input th:if="${person==null}" th:field="*{surname}" type="text"
+                        <input th:if="${user==null}" th:field="*{surname}" type="text"
                                th:class="${#fields.hasErrors('surname')}?'form-control is-invalid':'form-control'"
                                name="surname" id="surname2"
                                min="1" max="40"
@@ -63,15 +63,15 @@
                              class="invalid-feedback text-white"></div>
                     </div>
                     <div class="form-group">
-                        <label class="text-white col-md-12" th:if="${person!=null}" style="padding: 0;"><h5>Почта:</h5>
+                        <label class="text-white col-md-12" th:if="${user!=null}" style="padding: 0;"><h5>Почта:</h5>
                         </label>
-                        <input th:if="${person!=null}" th:value="${person.mail}" type="email"
+                        <input th:if="${user!=null}" th:value="${user.mail}" type="email"
                                th:class="${#fields.hasErrors('mail')}?'form-control is-invalid':'form-control'"
                                name="mail" id="mail1"
                                min="1" max="40"
                                placeholder="mail"
                                required="required"/>
-                        <input th:if="${person==null}" th:field="*{mail}" type="email"
+                        <input th:if="${user==null}" th:field="*{mail}" type="email"
                                th:class="${#fields.hasErrors('mail')}?'form-control is-invalid':'form-control'"
                                name="surname" id="mail2"
                                min="1" max="40"
@@ -80,41 +80,41 @@
                         <div th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"
                              class="invalid-feedback text-white"></div>
                     </div>
-                    <div class="form-group" th:if="${person!=null}">
+                    <div class="form-group" th:if="${user!=null}">
                         <label class="text-white col-md-12" style="padding: 0;"><h5>Роль:</h5></label>
                         <div class="form-check form-check-inline">
 
                             <input type="radio" class="form-check-input"
                                    id="admin-radio-button"
-                                   th:field="*{role}" th:value="${person.role.ADMIN}"/>
+                                   th:field="*{role}" th:value="${user.role.ADMIN}"/>
                             <label class="form-check-label" for="admin-radio-button">ADMIN</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input type="radio" class="form-check-input"
                                    id="manager-radio-button"
-                                   th:field="*{role}" th:value="${person.role.MANAGER}"/>
+                                   th:field="*{role}" th:value="${user.role.MANAGER}"/>
                             <label class="form-check-label" for="manager-radio-button">MANAGER</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input type="radio" class="form-check-input"
                                    id="user-radio-button"
-                                   th:field="*{role}" th:value="${person.role.USER}"/>
+                                   th:field="*{role}" th:value="${user.role.USER}"/>
                             <label class="form-check-label" for="user-radio-button">USER</label>
                         </div>
                     </div>
                     <div class="input-group form-group">
-                        <label class="text-white col-md-12" th:if="${person!=null}" style="padding: 0;"><h5>Логин:</h5>
+                        <label class="text-white col-md-12" th:if="${user!=null}" style="padding: 0;"><h5>Логин:</h5>
                         </label>
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-user"></i></span>
                         </div>
-                        <input th:if="${person!=null}" th:value="${person.login}" type="text"
+                        <input th:if="${user!=null}" th:value="${user.login}" type="text"
                                th:class="${#fields.hasErrors('login')}?'form-control is-invalid':'form-control'"
                                name="login" id="username1"
                                min="1" max="40"
                                placeholder="логин"
                                required="required"/>
-                        <input th:if="${person==null}" th:field="*{login}" type="text"
+                        <input th:if="${user==null}" th:field="*{login}" type="text"
                                th:class="${#fields.hasErrors('login')}?'form-control is-invalid':'form-control'"
                                name="username" id="username2"
                                min="1" max="40"
@@ -124,7 +124,7 @@
                              class="invalid-feedback text-white"></div>
                     </div>
 
-                    <div th:if="${person==null}" class="input-group form-group">
+                    <div th:if="${user==null}" class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-key"></i></span>
                         </div>
@@ -137,10 +137,10 @@
                         <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
                              class="invalid-feedback text-white"></div>
                     </div>
-                    <input th:if="${person!=null}" th:value="${person.password}" name="password"
+                    <input th:if="${user!=null}" th:value="${user.password}" name="password"
                            type="hidden">
                     <div class="form-group">
-                        <input type="submit" th:value="${person!=null}?'Изменить':'Регистрация'"
+                        <input type="submit" th:value="${user!=null}?'Изменить':'Регистрация'"
                                class="btn float-right login_btn">
                     </div>
                 </form>
@@ -151,10 +151,10 @@
 
 <div th:replace="fragments/footer :: footer"></div>
 
-<span th:if="${person!=null}">
-        <script th:if="${person.role.toString().equals('ADMIN')}">document.getElementById("admin-radio-button").checked = true;</script>
-        <script th:if="${person.role.toString().equals('MANAGER')}">document.getElementById("manager-radio-button").checked = true;</script>
-        <script th:if="${person.role.toString().equals('USER')}">document.getElementById("user-radio-button").checked = true;</script>
+<span th:if="${user!=null}">
+        <script th:if="${user.role.toString().equals('ADMIN')}">document.getElementById("admin-radio-button").checked = true;</script>
+        <script th:if="${user.role.toString().equals('MANAGER')}">document.getElementById("manager-radio-button").checked = true;</script>
+        <script th:if="${user.role.toString().equals('USER')}">document.getElementById("user-radio-button").checked = true;</script>
 
     </span>
 <script>document.getElementById("inlineRadio1").checked = true;</script>

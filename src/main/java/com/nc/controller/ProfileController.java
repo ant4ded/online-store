@@ -1,9 +1,9 @@
 package com.nc.controller;
 
 import com.nc.model.Category;
-import com.nc.model.Person;
+import com.nc.model.User;
 import com.nc.service.impl.CategoryServiceImpl;
-import com.nc.service.impl.PersonServiceImpl;
+import com.nc.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.query.Param;
@@ -25,41 +25,41 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ProfileController {
     private final CategoryServiceImpl categoryService;
-    private final PersonServiceImpl personService;
+    private final UserServiceImpl userService;
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String profile(Model model) {
         log.info("Go to profile page.");
         List<Category> categories = categoryService.findAll();
-        Person person = personService.findAuthenticationPerson();
+        User user = userService.findAuthenticationUser();
         model.addAttribute("categories", categories);
-        model.addAttribute("person", person);
-        model.addAttribute("personForm", new Person());
+        model.addAttribute("user", user);
+        model.addAttribute("userForm", new User());
         return "profile";
     }
 
     @RequestMapping(value = "/profile/update", method = RequestMethod.POST)
-    public String updatePerson(@ModelAttribute("personForm") @Valid Person person, BindingResult bindingResult, Model model) {
+    public String updateUser(@ModelAttribute("userForm") @Valid User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             Map<String, String> errorMap = ControllerUtils.getErrors(bindingResult);
             log.info("Errors occurred in input fields when updating user\n" + errorMap);
             model.mergeAttributes(errorMap);
-            model.addAttribute("person", person);
+            model.addAttribute("user", user);
             return "redirect:/profile";
         } else {
             log.info("Update user.");
-            personService.update(person, null, null);
+            userService.update(user, null, null);
             return "redirect:/profile";
         }
     }
 
     @RequestMapping(value = "/profile/update-password", method = RequestMethod.POST)
-    public String updatePerson(@Param("newPassword") @Valid String newPassword,
-                               @Param("confPassword") @Valid String confPassword, Model model) {
+    public String updateUser(@Param("newPassword") @Valid String newPassword,
+                             @Param("confPassword") @Valid String confPassword, Model model) {
         if (newPassword != null && newPassword.length() <= 255
                 && confPassword != null && confPassword.length() <= 255) {
-            Person person = personService.findAuthenticationPerson();
-            boolean isValid = personService.update(person, confPassword, newPassword);
+            User user = userService.findAuthenticationUser();
+            boolean isValid = userService.update(user, confPassword, newPassword);
             if (!isValid) {
                 log.info("Errors occurred in input fields when updating user.");
                 model.addAttribute("incorrect_password", "Не получилось изменить.");

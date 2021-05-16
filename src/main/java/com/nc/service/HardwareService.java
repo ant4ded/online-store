@@ -29,7 +29,7 @@ public interface HardwareService {
 
     List<Hardware> checkOnCharacteristicHardware(List<Hardware> hardwares, List<Characteristic> characteristics);
 
-    List<Hardware> findHardwaresByCharacteristicsIn(Characteristic characteristic);
+    List<Hardware> findAllHardwareByCharacteristicsIn(Characteristic characteristic);
 
     void saveAll(List<Hardware> hardwares);
 

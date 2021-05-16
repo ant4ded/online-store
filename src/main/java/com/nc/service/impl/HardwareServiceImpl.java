@@ -127,7 +127,7 @@ public class HardwareServiceImpl implements HardwareService {
     }
 
     @Override
-    public List<Hardware> findHardwaresByCharacteristicsIn(Characteristic characteristic) {
+    public List<Hardware> findAllHardwareByCharacteristicsIn(Characteristic characteristic) {
         log.info("Taking data from the database (Accessories by characteristics)");
         return dao.findAllByCharacteristics(characteristic);
     }

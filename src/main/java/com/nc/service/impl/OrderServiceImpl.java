@@ -3,7 +3,7 @@ package com.nc.service.impl;
 import com.nc.enums.Status;
 import com.nc.model.Hardware;
 import com.nc.model.Order;
-import com.nc.model.Person;
+import com.nc.model.User;
 import com.nc.repository.OrderRepository;
 import com.nc.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository dao;
     private final HardwareServiceImpl hardwareService;
-    private final PersonServiceImpl personService;
+    private final UserServiceImpl userService;
 
     @Override
     public List<Order> findAll() {
@@ -35,15 +35,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findByPerson_Id(long id) {
+    public List<Order> findByUser_Id(long id) {
         log.info("Taking data from the database (Orders by user ID)");
-        return dao.findByPerson_Id(id);
+        return dao.findByUser_Id(id);
     }
 
     @Override
-    public List<Order> findByPerson(Person person) {
+    public List<Order> findByUser(User user) {
         log.info("Taking data from the database (Orders for the user)");
-        return dao.findByPerson(person);
+        return dao.findByUser(user);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
         Order oldOrder = dao.findById(order.getId());
         order.setHardware(oldOrder.getHardware());
         order.setCount(oldOrder.getCount());
-        order.setPerson(oldOrder.getPerson());
+        order.setUser(oldOrder.getUser());
         log.info("Updating order data in the database\n" + order.toString());
         dao.save(order);
     }
@@ -77,8 +77,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean createOneOrderForAll(long idHardware, int count) {
         Hardware hardware = hardwareService.findById(idHardware);
-        Person person = personService.findAuthenticationPerson();
-        Order orderExist = dao.findByHardwareAndPersonAndStatus(hardware, person, Status.IN_CART);
+        User user = userService.findAuthenticationUser();
+        Order orderExist = dao.findByHardwareAndUserAndStatus(hardware, user, Status.IN_CART);
         if (orderExist != null && orderExist.getCount() >= hardware.getTotalCount())
             return false;
         if (hardware.getTotalCount() == 0) {
@@ -89,7 +89,7 @@ public class OrderServiceImpl implements OrderService {
                 log.info("Updating order data in the database\n" + orderExist.toString());
                 dao.save(orderExist);
             } else {
-                Order order = new Order(0, person, hardware, count, Status.IN_CART);
+                Order order = new Order(0, count, Status.IN_CART, user, hardware);
                 log.info("Writing order data to the database\n" + order.toString());
                 dao.save(order);
             }
@@ -105,16 +105,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void deleteAllByPersonId(long id) {
+    public void deleteAllByUserId(long id) {
         log.info("Delete orders by user ID");
-        dao.deleteAllByPersonId(id);
+        dao.deleteAllByUserId(id);
     }
 
     @Override
     public boolean checkoutOrdersForUser() {
         boolean isAllValidate = true;
-        Person person = personService.findAuthenticationPerson();
-        List<Order> orders = dao.findByPersonAndStatus(person, Status.IN_CART);
+        User user = userService.findAuthenticationUser();
+        List<Order> orders = dao.findByUserAndStatus(user, Status.IN_CART);
         orders.forEach(order -> order.setStatus(Status.IN_PROCESSING));
         orders.forEach(order -> {
             if (order.getCount() <= order.getHardware().getTotalCount())
@@ -145,8 +145,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findByPersonAndStatus(Person person, Status status) {
+    public List<Order> findByUserAndStatus(User user, Status status) {
         log.info("Taking data from the database (Orders for a specific user and status)");
-        return dao.findByPersonAndStatus(person, status);
+        return dao.findByUserAndStatus(user, status);
     }
 }

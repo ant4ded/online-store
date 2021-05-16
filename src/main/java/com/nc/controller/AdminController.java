@@ -24,18 +24,20 @@ import java.util.Map;
 public class AdminController {
     private final CategoryServiceImpl categoryService;
     private final HardwareServiceImpl hardwareService;
-    private final PersonServiceImpl personService;
+    private final UserServiceImpl userService;
     private final OrderServiceImpl orderService;
     private final CharacteristicServiceImpl characteristicService;
 
-    // TODO: 12.05.2021 make rest
-    // TODO: 12.05.2021 db names
+    // TODO: 15.05.2021 many to many relationship category-characteristic
+    // TODO: 15.05.2021 data design pattern entity-value
+    // TODO: 15.05.2021 search
+    // TODO: 12.05.2021 CHECK db names
 
     @RequestMapping("/admin")
     public String admin(Model model) {
         log.info("Go to admin panel.");
         List<Category> categories = categoryService.findAll();
-        List<Person> people = personService.findPersonsForAdmin();
+        List<User> people = userService.findUsersForAdmin();
         List<Hardware> hardwares = hardwareService.findAll();
         List<Order> orders = orderService.findAll();
         model.addAttribute("categories", categories);
@@ -52,42 +54,42 @@ public class AdminController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/update", method = RequestMethod.GET)
-    public String updatePerson(@RequestParam(name = "personId") long idPerson, Model model) {
+    public String updateUser(@RequestParam(name = "userId") long idUser, Model model) {
         log.info("Go to the user data update page");
         List<Category> categories = categoryService.findAll();
 
         model.addAttribute("categories", categories);
-        Person person = personService.findById(idPerson);
-        model.addAttribute("personForm", new Person());
-        model.addAttribute("person", person);
+        User user = userService.findById(idUser);
+        model.addAttribute("userForm", new User());
+        model.addAttribute("user", user);
         return "registration";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String updatePerson(@ModelAttribute("personForm") @Valid Person person, BindingResult bindingResult, Model model) {
+    public String updateUser(@ModelAttribute("userForm") @Valid User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             Map<String, String> errorMap = ControllerUtils.getErrors(bindingResult);
             model.mergeAttributes(errorMap);
             log.info("Errors occurred in input fields when updating user\n" + errorMap);
-            model.addAttribute("person", person);
+            model.addAttribute("user", user);
             return "registration";
 
         } else {
-            Person oldPerson = personService.findById(person.getId());
-            person.setPassword(oldPerson.getPassword());
-            person.setActive(oldPerson.isActive());
+            User oldUser = userService.findById(user.getId());
+            user.setPassword(oldUser.getPassword());
+            user.setActive(oldUser.isActive());
             log.info("Update user.");
-            personService.save(person);
+            userService.save(user);
             return "redirect:/admin";
         }
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @RequestMapping(value = "/delete-person", method = RequestMethod.POST)
-    public String deletePerson(@RequestParam(name = "personId") long idPerson) {
+    @RequestMapping(value = "/delete-user", method = RequestMethod.POST)
+    public String deleteUser(@RequestParam(name = "userId") long idUser) {
         log.info("Delete user");
-        personService.delete(idPerson);
+        userService.delete(idUser);
         return "redirect:/admin";
     }
 

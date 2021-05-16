@@ -69,7 +69,7 @@ public class CharacteristicServiceImpl implements CharacteristicService {
 
     @Override
     public void delete(Characteristic characteristic) {
-        List<Hardware> hardwares = hardwareService.findHardwaresByCharacteristicsIn(characteristic);
+        List<Hardware> hardwares = hardwareService.findAllHardwareByCharacteristicsIn(characteristic);
         hardwares.forEach(hardware -> hardware.getCharacteristics().removeIf(hardwareCharacteristic -> hardwareCharacteristic.equals(characteristic)));
         hardwareService.saveAll(hardwares);
         log.info("Delete characteristic data from the database\n" + characteristic.toString());
