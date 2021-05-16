@@ -28,7 +28,9 @@ public class AdminController {
     private final OrderServiceImpl orderService;
     private final CharacteristicServiceImpl characteristicService;
 
-    // TODO: 12.05.2021 make rest
+    // TODO: 15.05.2021 many to many relationship category-characteristic
+    // TODO: 15.05.2021 data design pattern entity-value
+    // TODO: 15.05.2021 search
     // TODO: 12.05.2021 CHECK db names
 
     @RequestMapping("/admin")
